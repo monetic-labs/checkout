@@ -136,6 +136,17 @@ export default function Checkout({
       setIsLoading(true);
       setIsOrderPlaced(true);
       try {
+        // Recalculate service fee and total IN CENTS for the backend
+        const subtotalInCents = orderData.order.subtotal;
+        const tipInCents = tipAmount; // Already in cents state
+        const serviceFeePercentage = Number(orderData.merchant.fee) / 100;
+        const baseForServiceFeeInCents = subtotalInCents + tipInCents;
+        // Use Math.round to avoid floating point issues and ensure integer cents
+        const serviceFeeInCents = Math.round(
+          baseForServiceFeeInCents * serviceFeePercentage
+        );
+        const totalInCents = subtotalInCents + tipInCents + serviceFeeInCents;
+
         const paymentDetails: TransactionProcessInputPreProcessed = {
           paymentProcessor: "WORLDPAY" as PaymentProcessor,
           order: {
@@ -155,8 +166,8 @@ export default function Checkout({
             },
             value: {
               currency: orderData.order.currency,
-              tipAmount,
-              total: orderData.order.subtotal + serviceFee + tipAmount,
+              tipAmount: tipInCents, // Send tip in cents
+              total: totalInCents, // Send correctly calculated total in cents
             },
             card: {
               name: cardDetails?.name ?? "",
@@ -205,10 +216,10 @@ export default function Checkout({
       shippingAddress.state !== billingAddress.state ||
       shippingAddress.postalCode !== billingAddress.postalCode);
 
-  const subTotal = orderData.order.subtotal;
+  const subTotal = orderData.order.subtotal / 100;
   const serviceFee =
-    (tipAmount + subTotal) * (Number(orderData.merchant.fee) / 100);
-  const total = subTotal + serviceFee + tipAmount;
+    (orderData.order.subtotal * (Number(orderData.merchant.fee) / 100)) / 100;
+  const total = subTotal + serviceFee + tipAmount / 100;
 
   return (
     <Card className="max-w-3xl mx-auto p-4 px-4">
@@ -355,7 +366,7 @@ export default function Checkout({
             onChange={(value) =>
               setTipAmount(
                 parseFloat(
-                  (Number(value) * orderData.order.subtotal).toFixed(2)
+                  (Number(value) * orderData.order.subtotal).toFixed(0)
                 )
               )
             }
@@ -371,7 +382,7 @@ export default function Checkout({
           {tipAmount > 0 && (
             <div className="flex justify-between">
               <span>Tip</span>
-              <span>${tipAmount.toFixed(2)}</span>
+              <span>${(tipAmount / 100).toFixed(2)}</span>
             </div>
           )}
           <div className="flex justify-between">

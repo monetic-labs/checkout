@@ -17,7 +17,7 @@ export function OrderInput() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center gap-4">
+    <form onSubmit={handleSubmit} className="flex items-center gap-4">
       <Input
         value={orderId}
         onChange={(e) => setOrderId(e.target.value)}

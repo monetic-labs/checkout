@@ -4,8 +4,11 @@ import { Card } from "@nextui-org/card";
 export default function OrderPage() {
   return (
     <div className="flex items-center justify-center">
-      <Card className="p-24 px-24 text-center">
-        <h1 className="text-2xl font-bold mb-4">Enter Order ID</h1>
+      <Card className="p-8 md:p-12 text-center">
+        <h1 className="text-3xl font-bold mb-2">Monetic Checkout</h1>
+        <p className="text-gray-400 mb-6">
+          Enter the Order ID provided to complete your purchase.
+        </p>
         <OrderInput />
       </Card>
     </div>
