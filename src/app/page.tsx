@@ -1,5 +1,5 @@
 import { OrderInput } from "@/components/home/order-input";
-import { Card } from "@nextui-org/card";
+import { Card } from "@heroui/card";
 
 export default function OrderPage() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Input } from "@nextui-org/input";
+import { Input } from "@heroui/input";
 import valid from "card-validator";
 
 export type CardDetails = {

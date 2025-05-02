@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Modal, ModalContent } from "@nextui-org/modal";
+import { Modal, ModalContent } from "@heroui/modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, XCircle } from "lucide-react";
-import { Button } from "@nextui-org/button";
-import { Progress } from "@nextui-org/progress";
+import { Button } from "@heroui/button";
+import { Progress } from "@heroui/progress";
 
 type SuccessModalProps = {
   isOpen: boolean;

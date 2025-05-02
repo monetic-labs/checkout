@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@nextui-org/button";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import { Input } from "@nextui-org/input";
-import { Link } from "@nextui-org/link";
-import { Radio, RadioGroup } from "@nextui-org/radio";
+import { Button } from "@heroui/button";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Input } from "@heroui/input";
+import { Link } from "@heroui/link";
+import { Radio, RadioGroup } from "@heroui/radio";
 
 import { siteConfig } from "@/config/site";
 

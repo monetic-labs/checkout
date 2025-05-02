@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import { Checkbox } from "@nextui-org/checkbox";
-import { Input } from "@nextui-org/input";
-import { RadioGroup, Radio, useRadio, RadioProps } from "@nextui-org/radio";
-import { Button } from "@nextui-org/button";
-import { Divider } from "@nextui-org/divider";
+import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Checkbox } from "@heroui/checkbox";
+import { Input } from "@heroui/input";
+import { RadioGroup, Radio, useRadio, RadioProps } from "@heroui/radio";
+import { Button } from "@heroui/button";
+import { Divider } from "@heroui/divider";
 import { InfoIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Tooltip } from "@nextui-org/tooltip";
-import { Slider } from "@nextui-org/slider";
+import { Tooltip } from "@heroui/tooltip";
+import { Slider } from "@heroui/slider";
 
 import CardDetailsForm, {
   CardDetails,
@@ -243,7 +243,7 @@ export default function Checkout({
         <p className="text-sm text-gray-500">
           You&apos;re purchasing from{" "}
           <span className="font-semibold">{orderData.merchant.name}</span> via
-          Backpack
+          Monetic
         </p>
       </CardHeader>
       <CardBody className="space-y-6">
@@ -251,9 +251,10 @@ export default function Checkout({
           <div className="border-l-4 border-blue-500 h-full"></div>
           <InfoIcon className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
           <p>
-            <span className="font-semibold">Backpack</span> is the payment
-            processor for this transaction. The charge on your statement will
-            appear as <span className="font-semibold">BACKPACK LLC</span>.
+            The payment processor for this transaction is{" "}
+            <span className="font-semibold">Monetic</span>, and the charge on
+            your statement will appear as{" "}
+            <span className="font-semibold">Monetic</span>.
           </p>
         </div>
 
@@ -396,7 +397,8 @@ export default function Checkout({
         </div>
 
         <Checkbox isSelected={isAcknowledged} onValueChange={setIsAcknowledged}>
-          I acknowledge that Backpack is processing this payment on behalf of{" "}
+          I acknowledge that <span className="font-semibold">Monetic</span> is
+          processing this payment on behalf of{" "}
           <span className="font-semibold">{orderData.merchant.name}</span>, and
           I confirm that all provided information is accurate.
         </Checkbox>

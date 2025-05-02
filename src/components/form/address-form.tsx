@@ -1,10 +1,10 @@
 import React from "react";
-import { Input } from "@nextui-org/input";
+import { Input } from "@heroui/input";
 import {
   Autocomplete,
   AutocompleteSection,
   AutocompleteItem,
-} from "@nextui-org/autocomplete";
+} from "@heroui/autocomplete";
 import { Address } from "@/pylon/types";
 
 const states = [
@@ -100,9 +100,7 @@ export default function AddressForm({
           onSelectionChange={(key) => onStateChange(key as string)}
         >
           {states.map((state) => (
-            <AutocompleteItem key={state.value} value={state.value}>
-              {state.label}
-            </AutocompleteItem>
+            <AutocompleteItem key={state.value}>{state.label}</AutocompleteItem>
           ))}
         </Autocomplete>
         <Input

@@ -1,4 +1,4 @@
-import { Radio, RadioGroup } from "@nextui-org/radio";
+import { Radio, RadioGroup } from "@heroui/radio";
 
 type TipFormProps = {
   subtotal: number;

@@ -1,5 +1,5 @@
-import { Button } from "@nextui-org/button";
-import { Card } from "@nextui-org/card";
+import { Button } from "@heroui/button";
+import { Card } from "@heroui/card";
 import Link from "next/link";
 
 export default function NotFound() {
