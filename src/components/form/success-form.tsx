@@ -66,70 +66,76 @@ export default function SuccessForm({
         >
           <ModalContent>
             {() => (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col items-center justify-center p-6"
-              >
+              <div className="flex flex-col items-center justify-center p-6">
                 <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{
-                    delay: 0.2,
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 10,
-                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col items-center justify-center w-full"
                 >
-                  {isSuccess ? (
-                    <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
-                  ) : (
-                    <XCircle className="w-16 h-16 text-red-500 mb-4" />
-                  )}
-                </motion.div>
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-2xl font-bold text-foreground mb-2"
-                >
-                  {title}
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-center text-foreground-500 mb-4"
-                >
-                  {message}
-                </motion.p>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 0.5 }}
-                  className="w-full"
-                >
-                  <Button
-                    color="primary"
-                    variant="shadow"
-                    onPress={onClose}
-                    className="w-full mb-4"
+                  <div>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{
+                        delay: 0.2,
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 10,
+                      }}
+                    >
+                      {isSuccess ? (
+                        <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
+                      ) : (
+                        <XCircle className="w-16 h-16 text-red-500 mb-4" />
+                      )}
+                    </motion.div>
+                  </div>
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className="text-2xl font-bold text-foreground mb-2"
                   >
-                    Close
-                  </Button>
-                  {autoFadeOut && (
-                    <Progress
-                      aria-label="Auto-close progress"
-                      size="sm"
-                      value={progress}
-                      color="success"
-                      className="max-w-md"
-                    />
-                  )}
+                    {title}
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    className="text-center text-foreground-500 mb-4"
+                  >
+                    {message}
+                  </motion.p>
+                  <div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.5, duration: 0.5 }}
+                      className="w-full"
+                    >
+                      <Button
+                        color="primary"
+                        variant="shadow"
+                        onPress={onClose}
+                        className="w-full mb-4"
+                      >
+                        Close
+                      </Button>
+                      {autoFadeOut && (
+                        <Progress
+                          aria-label="Auto-close progress"
+                          size="sm"
+                          value={progress}
+                          color="success"
+                          className="max-w-md"
+                        />
+                      )}
+                    </motion.div>
+                  </div>
                 </motion.div>
-              </motion.div>
+              </div>
             )}
           </ModalContent>
         </Modal>

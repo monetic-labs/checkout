@@ -20,7 +20,7 @@ export type GetOrderLinkOutput = {
     subtotal: number;
     currency: ISO4217Currency;
   };
-  customer: {
+  customer?: {
     email: string;
     phone: string;
   };

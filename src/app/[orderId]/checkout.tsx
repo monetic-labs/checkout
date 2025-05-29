@@ -38,6 +38,8 @@ export default function Checkout({
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [isCardValid, setIsCardValid] = useState(false);
   const [cardDetails, setCardDetails] = useState<CardDetails | null>(null);
+  const [email, setEmail] = useState(orderData.customer?.email || "");
+  const [phone, setPhone] = useState(orderData.customer?.phone || "");
   const [shippingAddress, setShippingAddress] = useState<Address>({
     firstName: "",
     lastName: "",
@@ -151,8 +153,8 @@ export default function Checkout({
           paymentProcessor: "WORLDPAY" as PaymentProcessor,
           order: {
             customer: {
-              email: orderData.customer.email,
-              phoneNumber: orderData.customer.phone,
+              email: email,
+              phoneNumber: phone,
               shippingAddress: {
                 firstName: shippingAddress.firstName,
                 lastName: shippingAddress.lastName,
@@ -231,7 +233,9 @@ export default function Checkout({
           placement="top"
           color="warning"
         >
-          <InfoIcon className="w-4 h-4 mr-2" />
+          <div className="flex items-center">
+            <InfoIcon className="w-4 h-4 mr-2" />
+          </div>
         </Tooltip>
         <span>
           Order expires in: {timeLeft}
@@ -249,7 +253,9 @@ export default function Checkout({
       <CardBody className="space-y-6">
         <div className="bg-blue-100 p-4 rounded-md text-sm text-blue-700 flex items-start">
           <div className="border-l-4 border-blue-500 h-full"></div>
-          <InfoIcon className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start">
+            <InfoIcon className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
+          </div>
           <p>
             The payment processor for this transaction is{" "}
             <span className="font-semibold">Monetic</span>, and the charge on
@@ -263,14 +269,18 @@ export default function Checkout({
           <Input
             label="Email"
             name="email"
-            value={orderData.customer.email}
-            isDisabled
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            isDisabled={!!orderData.customer?.email}
+            isRequired={!orderData.customer?.email}
           />
           <Input
             label="Phone"
             name="phone"
-            value={orderData.customer.phone}
-            isDisabled
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            isDisabled={!!orderData.customer?.phone}
+            isRequired={!orderData.customer?.phone}
           />
         </div>
 
