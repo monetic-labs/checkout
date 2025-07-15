@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
-import { RadioGroup, Radio, useRadio, RadioProps } from "@heroui/radio";
+import { RadioGroup, Radio } from "@heroui/radio";
 import { Button } from "@heroui/button";
 import { Divider } from "@heroui/divider";
 import { InfoIcon } from "lucide-react";
@@ -32,7 +32,7 @@ export default function Checkout({
 }: {
   orderData: Omit<GetOrderLinkOutput, "paymentToken">;
   onPayment: (
-    paymentDetails: TransactionProcessInputPreProcessed
+    paymentDetails: TransactionProcessInputPreProcessed,
   ) => Promise<boolean>;
 }) {
   const [paymentMethod, setPaymentMethod] = useState("card");
@@ -82,6 +82,7 @@ export default function Checkout({
       } else {
         const minutes = Math.floor((difference / 1000 / 60) % 60);
         const seconds = Math.floor((difference / 1000) % 60);
+
         setTimeLeft(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
       }
     }, 1000);
@@ -91,8 +92,9 @@ export default function Checkout({
 
   useEffect(() => {
     const initialTipPercentage = 0.15;
+
     setTipAmount(
-      parseFloat((initialTipPercentage * orderData.order.subtotal).toFixed(2))
+      parseFloat((initialTipPercentage * orderData.order.subtotal).toFixed(2)),
     );
   }, [orderData.order.subtotal]);
 
@@ -120,6 +122,7 @@ export default function Checkout({
 
   const handleShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setShippingAddress((prev) => ({ ...prev, [name]: value }));
     if (sameAsShipping) {
       setBillingAddress((prev) => ({ ...prev, [name]: value }));
@@ -128,6 +131,7 @@ export default function Checkout({
 
   const handleBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setBillingAddress((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -145,7 +149,7 @@ export default function Checkout({
         const baseForServiceFeeInCents = subtotalInCents + tipInCents;
         // Use Math.round to avoid floating point issues and ensure integer cents
         const serviceFeeInCents = Math.round(
-          baseForServiceFeeInCents * serviceFeePercentage
+          baseForServiceFeeInCents * serviceFeePercentage,
         );
         const totalInCents = subtotalInCents + tipInCents + serviceFeeInCents;
 
@@ -175,10 +179,10 @@ export default function Checkout({
               name: cardDetails?.name ?? "",
               number: cardDetails?.number.replace(/\s/g, "") ?? "",
               expiryYear: parseInt(
-                cardDetails?.expiration?.split("/")[1] ?? ""
+                cardDetails?.expiration?.split("/")[1] ?? "",
               ),
               expiryMonth: parseInt(
-                cardDetails?.expiration?.split("/")[0] ?? ""
+                cardDetails?.expiration?.split("/")[0] ?? "",
               ),
               cvv: cardDetails?.cvv ?? "",
             },
@@ -186,6 +190,7 @@ export default function Checkout({
         };
 
         const result = await onPayment(paymentDetails);
+
         setIsOrderSuccess(result);
 
         if (result) {
@@ -228,10 +233,10 @@ export default function Checkout({
       {isLoading && <LoadingOverlay />}
       <div className="bg-yellow-100 p-2 rounded-t-md text-sm text-yellow-700 flex items-center justify-center">
         <Tooltip
-          showArrow={true}
+          color="warning"
           content={`If this expires and you did not complete the purchase, please contact ${orderData.merchant.name} for support.`}
           placement="top"
-          color="warning"
+          showArrow={true}
         >
           <div className="flex items-center">
             <InfoIcon className="w-4 h-4 mr-2" />
@@ -239,7 +244,7 @@ export default function Checkout({
         </Tooltip>
         <span>
           Order expires in: {timeLeft}
-          <span id="countdown" className="font-semibold"></span>
+          <span className="font-semibold" id="countdown" />
         </span>
       </div>
       <CardHeader className="flex-col items-start">
@@ -252,7 +257,7 @@ export default function Checkout({
       </CardHeader>
       <CardBody className="space-y-6">
         <div className="bg-blue-100 p-4 rounded-md text-sm text-blue-700 flex items-start">
-          <div className="border-l-4 border-blue-500 h-full"></div>
+          <div className="border-l-4 border-blue-500 h-full" />
           <div className="flex items-start">
             <InfoIcon className="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" />
           </div>
@@ -267,26 +272,26 @@ export default function Checkout({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Your Information</h3>
           <Input
+            isDisabled={!!orderData.customer?.email}
+            isRequired={!orderData.customer?.email}
             label="Email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            isDisabled={!!orderData.customer?.email}
-            isRequired={!orderData.customer?.email}
           />
           <Input
+            isDisabled={!!orderData.customer?.phone}
+            isRequired={!orderData.customer?.phone}
             label="Phone"
             name="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            isDisabled={!!orderData.customer?.phone}
-            isRequired={!orderData.customer?.phone}
           />
         </div>
 
         <AddressForm
-          title="Shipping Information"
           address={shippingAddress}
+          title="Shipping Information"
           onChange={handleShippingChange}
           onStateChange={handleStateChange("shipping")}
         />
@@ -297,8 +302,8 @@ export default function Checkout({
 
         {!sameAsShipping && (
           <AddressForm
-            title="Billing Information"
             address={billingAddress}
+            title="Billing Information"
             onChange={handleBillingChange}
             onStateChange={handleStateChange("billing")}
           />
@@ -314,9 +319,9 @@ export default function Checkout({
               information may require additional verification steps.
             </p>
             <Checkbox
+              className="mt-2"
               isSelected={addressMismatchAcknowledged}
               onValueChange={setAddressMismatchAcknowledged}
-              className="mt-2"
             >
               I confirm that the billing and shipping information provided is
               correct
@@ -328,18 +333,18 @@ export default function Checkout({
           <h3 className="text-lg font-semibold">Payment Method</h3>
 
           <RadioGroup
-            value={paymentMethod}
-            onValueChange={setPaymentMethod}
-            orientation="horizontal"
             classNames={{
               wrapper: "space-x-4",
             }}
+            orientation="horizontal"
+            value={paymentMethod}
+            onValueChange={setPaymentMethod}
           >
             <Radio value="card">Credit or Debit Card</Radio>
-            <Radio value="apple" isDisabled description="Coming Soon">
+            <Radio isDisabled description="Coming Soon" value="apple">
               Apple Pay
             </Radio>
-            <Radio value="google" isDisabled description="Coming Soon">
+            <Radio isDisabled description="Coming Soon" value="google">
               Google Pay
             </Radio>
           </RadioGroup>
@@ -353,12 +358,9 @@ export default function Checkout({
 
         <div className="space-y-4">
           <Slider
-            label="Add a tip"
-            showTooltip={true}
-            step={0.05}
+            className="max-w-full"
             formatOptions={{ style: "percent" }}
-            maxValue={0.3}
-            minValue={0}
+            label="Add a tip"
             marks={[
               {
                 value: 0.1,
@@ -373,15 +375,18 @@ export default function Checkout({
                 label: `20%`,
               },
             ]}
+            maxValue={0.3}
+            minValue={0}
+            showTooltip={true}
+            step={0.05}
             value={tipAmount / orderData.order.subtotal}
             onChange={(value) =>
               setTipAmount(
                 parseFloat(
-                  (Number(value) * orderData.order.subtotal).toFixed(0)
-                )
+                  (Number(value) * orderData.order.subtotal).toFixed(0),
+                ),
               )
             }
-            className="max-w-full"
           />
         </div>
 
@@ -430,22 +435,22 @@ export default function Checkout({
             Place Order
           </Button>
           <SuccessForm
+            fadeOutOpts={{ autoFadeOut: false }}
+            isLoading={isLoading}
             isOpen={isSuccessOpen}
+            isSuccess={isOrderSuccess}
+            message={
+              isOrderSuccess
+                ? `Your order has been placed successfully. You should shortly receive a confirmation email and SMS text with your order details.`
+                : `Your order has failed to be placed. Please try again.`
+            }
+            title={isOrderSuccess ? "Order Placed" : "Order Failed"}
             onClose={() => {
               setIsSuccessOpen(false);
               if (!isOrderSuccess) {
                 setIsOrderPlaced(false); // Allow retry on failure
               }
             }}
-            title={isOrderSuccess ? "Order Placed" : "Order Failed"}
-            message={
-              isOrderSuccess
-                ? `Your order has been placed successfully. You should shortly receive a confirmation email and SMS text with your order details.`
-                : `Your order has failed to be placed. Please try again.`
-            }
-            isSuccess={isOrderSuccess}
-            fadeOutOpts={{ autoFadeOut: false }}
-            isLoading={isLoading}
           />
         </div>
       </CardBody>

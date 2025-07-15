@@ -1,10 +1,7 @@
 import React from "react";
 import { Input } from "@heroui/input";
-import {
-  Autocomplete,
-  AutocompleteSection,
-  AutocompleteItem,
-} from "@heroui/autocomplete";
+import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
+
 import { Address } from "@/pylon/types";
 
 const states = [

@@ -1,5 +1,6 @@
-import { OrderInput } from "@/components/home/order-input";
 import { Card } from "@heroui/card";
+
+import { OrderInput } from "@/components/home/order-input";
 
 export default function OrderPage() {
   return (

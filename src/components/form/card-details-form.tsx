@@ -69,6 +69,7 @@ export default function CardDetailsForm({ onCardChange }: Props) {
     setCardErrors(newErrors);
 
     const isValid = Object.values(newErrors).every((error) => error === "");
+
     onCardChange(card, isValid);
   }, [card, touchedFields, onCardChange]);
 
@@ -101,14 +102,17 @@ export default function CardDetailsForm({ onCardChange }: Props) {
 
   const formatExpirationDate = (value: string) => {
     const cleanValue = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+
     if (cleanValue.length === 0) return "";
     if (cleanValue.length <= 2) return cleanValue;
+
     return `${cleanValue.slice(0, 2)} / ${cleanValue.slice(2, 4)}`;
   };
 
   const handleChange =
     (field: keyof CardDetails) => (e: React.ChangeEvent<HTMLInputElement>) => {
       let value = e.target.value;
+
       switch (field) {
         case "name":
           if (isValidName(value)) {
@@ -121,6 +125,7 @@ export default function CardDetailsForm({ onCardChange }: Props) {
           break;
         case "expiration":
           const formattedValue = formatExpirationDate(value);
+
           if (formattedValue !== card.expiration) {
             setCard({ ...card, [field]: formattedValue });
           }
@@ -141,41 +146,41 @@ export default function CardDetailsForm({ onCardChange }: Props) {
   return (
     <div className="space-y-4">
       <Input
+        errorMessage={cardErrors.name}
+        isInvalid={!!cardErrors.name}
         label="Cardholder Name"
         placeholder="John Smith Doe"
         value={card.name}
-        onChange={handleChange("name")}
         onBlur={handleBlur("name")}
-        isInvalid={!!cardErrors.name}
-        errorMessage={cardErrors.name}
+        onChange={handleChange("name")}
       />
       <Input
+        errorMessage={cardErrors.number}
+        isInvalid={!!cardErrors.number}
         label="Card Number"
         placeholder="1234 5678 9012 3456"
         value={card.number}
-        onChange={handleChange("number")}
         onBlur={handleBlur("number")}
-        isInvalid={!!cardErrors.number}
-        errorMessage={cardErrors.number}
+        onChange={handleChange("number")}
       />
       <div className="grid grid-cols-2 gap-4">
         <Input
+          errorMessage={cardErrors.expiration}
+          isInvalid={!!cardErrors.expiration}
           label="Expiration Date"
           placeholder="MM / YY"
           value={card.expiration}
-          onChange={handleChange("expiration")}
           onBlur={handleBlur("expiration")}
-          isInvalid={!!cardErrors.expiration}
-          errorMessage={cardErrors.expiration}
+          onChange={handleChange("expiration")}
         />
         <Input
+          errorMessage={cardErrors.cvv}
+          isInvalid={!!cardErrors.cvv}
           label="CVV"
           placeholder="123"
           value={card.cvv}
-          onChange={handleChange("cvv")}
           onBlur={handleBlur("cvv")}
-          isInvalid={!!cardErrors.cvv}
-          errorMessage={cardErrors.cvv}
+          onChange={handleChange("cvv")}
         />
       </div>
     </div>

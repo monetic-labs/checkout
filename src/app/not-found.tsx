@@ -10,7 +10,7 @@ export default function NotFound() {
         <p className="text-xl mb-8">
           The order you&apos;re looking for doesn&apos;t exist.
         </p>
-        <Button as={Link} href="/" color="primary">
+        <Button as={Link} color="primary" href="/">
           Go Home
         </Button>
       </Card>

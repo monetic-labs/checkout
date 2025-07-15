@@ -14,7 +14,7 @@ export default function LoadingOverlay() {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <Spinner size="lg" color="white" />
+      <Spinner color="white" size="lg" />
     </div>
   );
 }

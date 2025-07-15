@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
-import Checkout from "./checkout";
 import { revalidateTag } from "next/cache";
+
+import Checkout from "./checkout";
+
 import { getOrderLink, processTransaction } from "@/pylon/apis";
 import {
   GetOrderLinkOutput,
@@ -10,13 +12,15 @@ import {
 import { CardSessionInput, createCardSession } from "@/worldpay/apis";
 
 async function getOrderData(
-  orderId: string
+  orderId: string,
 ): Promise<GetOrderLinkOutput | null> {
   try {
     const data = await getOrderLink(orderId);
+
     return data.data;
   } catch (error) {
     console.error("Error fetching order:", error);
+
     return null;
   }
 }
@@ -27,6 +31,7 @@ export default async function PaymentPage({
   params: { orderId: string };
 }) {
   const orderData = await getOrderData(params.orderId);
+
   if (!orderData) {
     notFound();
   }
@@ -38,6 +43,7 @@ export default async function PaymentPage({
 
   if (now > expiresAt) {
     revalidateTag(`order-${params.orderId}`);
+
     return {
       redirect: {
         destination: "/",
@@ -47,11 +53,12 @@ export default async function PaymentPage({
   }
 
   async function handlePayment(
-    paymentDetails: TransactionProcessInputPreProcessed
+    paymentDetails: TransactionProcessInputPreProcessed,
   ) {
     "use server";
 
     const worldpayIdentity = process.env.WORLDPAY_IDENTITY;
+
     if (!worldpayIdentity) {
       throw new Error("Unable to process payment: missing payment token");
     }
@@ -68,6 +75,7 @@ export default async function PaymentPage({
 
     // Call Worldpay API to create card session
     const sessionUrl = await createCardSession(cardDetails);
+
     if (!sessionUrl) {
       throw new Error("Unable to process payment: missing session url");
     }
@@ -83,12 +91,13 @@ export default async function PaymentPage({
     const result = await processTransaction(
       paymentDetails.paymentProcessor,
       processedPaymentDetails,
-      paymentToken
+      paymentToken,
     );
 
     if (result) {
       return true;
     }
+
     return false;
   }
 

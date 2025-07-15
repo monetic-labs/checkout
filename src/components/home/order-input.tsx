@@ -17,13 +17,13 @@ export function OrderInput() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-4">
+    <form className="flex items-center gap-4" onSubmit={handleSubmit}>
       <Input
+        placeholder="Enter Order ID"
         value={orderId}
         onChange={(e) => setOrderId(e.target.value)}
-        placeholder="Enter Order ID"
       />
-      <Button type="submit" color="primary">
+      <Button color="primary" type="submit">
         Go to Order
       </Button>
     </form>

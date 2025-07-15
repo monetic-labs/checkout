@@ -17,17 +17,17 @@ export default function TipForm({ subtotal, setTipAmount }: TipFormProps) {
       </h3>
 
       <RadioGroup
-        onValueChange={(value) => setTipAmount(parseFloat(value))}
         className="flex space-x-2"
         orientation="horizontal"
+        onValueChange={(value) => setTipAmount(parseFloat(value))}
       >
-        <Radio value="0" id="tip-0">
+        <Radio id="tip-0" value="0">
           No tip
         </Radio>
-        <Radio value={`${subtotal * 0.1}`} id="tip-10">
+        <Radio id="tip-10" value={`${subtotal * 0.1}`}>
           10% (${(subtotal * 0.1).toFixed(2)})
         </Radio>
-        <Radio value={`${subtotal * 0.15}`} id="tip-15">
+        <Radio id="tip-15" value={`${subtotal * 0.15}`}>
           15% (${(subtotal * 0.15).toFixed(2)})
         </Radio>
       </RadioGroup>

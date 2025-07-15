@@ -1,6 +1,7 @@
 "use server";
 
 const worldpayApiUrl = process.env.WORLDPAY_API_URL;
+
 if (!worldpayApiUrl) {
   throw new Error("WORLDPAY_API_URL is not set");
 }
@@ -25,13 +26,13 @@ export type CardSessionOutput = {
         href: string;
         name: string;
         templated: boolean;
-      }
+      },
     ];
   };
 };
 
 export const createCardSession = async (
-  input: CardSessionInput
+  input: CardSessionInput,
 ): Promise<CardSessionOutput["_links"]["sessions:session"]["href"]> => {
   const response = await fetch(`${worldpayApiUrl}/sessions/card`, {
     method: "POST",
@@ -50,5 +51,6 @@ export const createCardSession = async (
     }),
   });
   const data: CardSessionOutput = await response.json();
+
   return data._links["sessions:session"].href;
 };
