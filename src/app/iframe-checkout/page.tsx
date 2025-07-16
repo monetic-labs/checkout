@@ -1,29 +1,74 @@
 "use client";
 
 import React, { useState } from "react";
-import { validateIframeCheckout } from "@/components/form/iframe-checkout-validation";
+import { validateIframeCheckout } from "@/app/iframe-checkout/validators";
+import { formatCardNumber, formatExpiry } from "@/app/iframe-checkout/formatters";
 
-function formatCardNumber(value: string) {
-  // Remove all non-digit characters
-  const digits = value.replace(/\D/g, "");
-  // Insert a space after every 4 digits
-  return digits.replace(/(.{4})/g, "$1 ").trim();
-}
-
-function formatExpiry(value: string) {
-  // Remove all non-digit characters
-  const digits = value.replace(/\D/g, "");
-  if (digits.length === 0) return "";
-  if (digits.length <= 2) return digits;
-  return digits.slice(0, 2) + "/" + digits.slice(2, 4);
-}
+const US_STATES = [
+  { value: "AL", label: "Alabama" },
+  { value: "AK", label: "Alaska" },
+  { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" },
+  { value: "CA", label: "California" },
+  { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" },
+  { value: "DE", label: "Delaware" },
+  { value: "DC", label: "District of Columbia" },
+  { value: "FL", label: "Florida" },
+  { value: "GA", label: "Georgia" },
+  { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" },
+  { value: "IL", label: "Illinois" },
+  { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" },
+  { value: "KS", label: "Kansas" },
+  { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" },
+  { value: "ME", label: "Maine" },
+  { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" },
+  { value: "MI", label: "Michigan" },
+  { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" },
+  { value: "MO", label: "Missouri" },
+  { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" },
+  { value: "NV", label: "Nevada" },
+  { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" },
+  { value: "NM", label: "New Mexico" },
+  { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" },
+  { value: "ND", label: "North Dakota" },
+  { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" },
+  { value: "OR", label: "Oregon" },
+  { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" },
+  { value: "SC", label: "South Carolina" },
+  { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" },
+  { value: "TX", label: "Texas" },
+  { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" },
+  { value: "VA", label: "Virginia" },
+  { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" },
+  { value: "WI", label: "Wisconsin" },
+  { value: "WY", label: "Wyoming" },
+];
 
 export default function IframeCheckout() {
   const [email, setEmail] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
-  const [address, setAddress] = useState("");
+  // Address fields
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zip, setZip] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -35,10 +80,15 @@ export default function IframeCheckout() {
     setExpiry(formatExpiry(e.target.value));
   };
 
+  const showExpandedAddress = address1.trim().length > 0;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
+
+    // Compose address string for validation
+    const address = [address1, address2, city, state, zip].filter(Boolean).join(", ");
 
     const validationError = validateIframeCheckout({
       email,
@@ -51,7 +101,6 @@ export default function IframeCheckout() {
       setError(validationError);
       return;
     }
-    // Placeholder for success
     setSuccess(true);
   };
 
@@ -128,16 +177,73 @@ export default function IframeCheckout() {
             />
           </div>
           <div className="mb-1.5">
-            <label className="block text-gray-700 mb-1">Address</label>
+            <label className="block text-gray-700 mb-1">Address Line 1</label>
             <input
               type="text"
               className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              placeholder="123 Main St, City, State, ZIP"
+              value={address1}
+              onChange={e => setAddress1(e.target.value)}
+              placeholder="123 Main St"
               required
             />
           </div>
+          {showExpandedAddress && (
+            <>
+              <div className="mb-1.5">
+                <label className="block text-gray-700 mb-1">Address Line 2 (optional)</label>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                  value={address2}
+                  onChange={e => setAddress2(e.target.value)}
+                  placeholder="Apt, suite, etc."
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-2 mb-1.5">
+                <div>
+                  <label className="block text-gray-700 mb-1">City</label>
+                  <input
+                    type="text"
+                    className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                    value={city}
+                    onChange={e => setCity(e.target.value)}
+                    placeholder="City"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-1">State</label>
+                  <select
+                    className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                    value={state}
+                    onChange={e => setState(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    {US_STATES.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gray-700 mb-1">ZIP Code</label>
+                  <input
+                    type="text"
+                    className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                    value={zip}
+                    onChange={e => setZip(e.target.value.replace(/\D/g, ""))}
+                    placeholder="ZIP"
+                    maxLength={10}
+                    required
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
         {error && <div className="text-red-500 mb-2 text-center text-sm">{error}</div>}
         {success && <div className="text-green-600 mb-2 text-center text-sm">Payment successful! (placeholder)</div>}
