@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import { validateIframeCheckout } from "@/components/form/iframe-checkout-validation";
 
 export default function IframeCheckout() {
   const [email, setEmail] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvc, setCvc] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
@@ -14,9 +16,16 @@ export default function IframeCheckout() {
     e.preventDefault();
     setError("");
     setSuccess(false);
-    // TODO: Add validation and payment logic
-    if (!email || !cardNumber || !expiry || !cvc) {
-      setError("Please fill in all fields.");
+
+    const validationError = validateIframeCheckout({
+      email,
+      cardNumber,
+      expiry,
+      cvc,
+      address,
+    });
+    if (validationError) {
+      setError(validationError);
       return;
     }
     // Placeholder for success
@@ -35,7 +44,7 @@ export default function IframeCheckout() {
           <label className="block text-gray-700 mb-1">Email</label>
           <input
             type="email"
-            className="w-full px-2 py-1.5 border rounded bg-white placeholder-gray-400 text-sm"
+            className="w-full px-2 py-1.5 border rounded bg-white placeholder-gray-400 text-sm text-black caret-black"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="email@example.com"
@@ -48,7 +57,7 @@ export default function IframeCheckout() {
             <label className="block text-gray-700 mb-1">Card Number</label>
             <input
               type="text"
-              className="w-full px-2 py-1.5 border rounded bg-white text-sm"
+              className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
               value={cardNumber}
               onChange={e => setCardNumber(e.target.value)}
               maxLength={19}
@@ -61,7 +70,7 @@ export default function IframeCheckout() {
               <label className="block text-gray-700 mb-1">Expiry</label>
               <input
                 type="text"
-                className="w-full px-2 py-1.5 border rounded bg-white text-sm"
+                className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
                 value={expiry}
                 onChange={e => setExpiry(e.target.value)}
                 maxLength={5}
@@ -73,7 +82,7 @@ export default function IframeCheckout() {
               <label className="block text-gray-700 mb-1">CVC</label>
               <input
                 type="text"
-                className="w-full px-2 py-1.5 border rounded bg-white text-sm"
+                className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
                 value={cvc}
                 onChange={e => setCvc(e.target.value)}
                 maxLength={4}
@@ -89,7 +98,7 @@ export default function IframeCheckout() {
             <label className="block text-gray-700 mb-1">Country</label>
             <input
               type="text"
-              className="w-full px-2 py-1.5 border rounded bg-gray-100 text-gray-500 cursor-not-allowed text-sm"
+              className="w-full px-2 py-1.5 border rounded bg-gray-100 text-gray-500 cursor-not-allowed text-sm text-black caret-black"
               value="United States"
               disabled
               readOnly
@@ -99,7 +108,9 @@ export default function IframeCheckout() {
             <label className="block text-gray-700 mb-1">Address</label>
             <input
               type="text"
-              className="w-full px-2 py-1.5 border rounded bg-white text-sm"
+              className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
               placeholder="123 Main St, City, State, ZIP"
               required
             />
