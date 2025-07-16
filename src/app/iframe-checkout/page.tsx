@@ -3,6 +3,21 @@
 import React, { useState } from "react";
 import { validateIframeCheckout } from "@/components/form/iframe-checkout-validation";
 
+function formatCardNumber(value: string) {
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, "");
+  // Insert a space after every 4 digits
+  return digits.replace(/(.{4})/g, "$1 ").trim();
+}
+
+function formatExpiry(value: string) {
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 0) return "";
+  if (digits.length <= 2) return digits;
+  return digits.slice(0, 2) + "/" + digits.slice(2, 4);
+}
+
 export default function IframeCheckout() {
   const [email, setEmail] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -11,6 +26,14 @@ export default function IframeCheckout() {
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCardNumber(formatCardNumber(e.target.value));
+  };
+
+  const handleExpiryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExpiry(formatExpiry(e.target.value));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +82,7 @@ export default function IframeCheckout() {
               type="text"
               className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
               value={cardNumber}
-              onChange={e => setCardNumber(e.target.value)}
+              onChange={handleCardNumberChange}
               maxLength={19}
               placeholder="1234 5678 9012 3456"
               required
@@ -72,7 +95,7 @@ export default function IframeCheckout() {
                 type="text"
                 className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
                 value={expiry}
-                onChange={e => setExpiry(e.target.value)}
+                onChange={handleExpiryChange}
                 maxLength={5}
                 placeholder="MM/YY"
                 required
@@ -84,7 +107,7 @@ export default function IframeCheckout() {
                 type="text"
                 className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
                 value={cvc}
-                onChange={e => setCvc(e.target.value)}
+                onChange={e => setCvc(e.target.value.replace(/\D/g, ""))}
                 maxLength={4}
                 placeholder="123"
                 required
