@@ -284,7 +284,7 @@ export default function IframeCheckout() {
             className="form-radio h-4 w-4 text-green-700"
           />
           <label htmlFor="monetic-option" className="ml-2 text-base font-semibold cursor-pointer" style={{ color: '#228B22' }}>
-            Pay with Monetic
+            Monetic Pay
           </label>
         </div>
         {/* Monetic Pay section */}
