@@ -213,3 +213,18 @@ export const NextUILogo: React.FC<IconSvgProps> = (props) => {
     </svg>
   );
 };
+
+export const CreditCardIcon: React.FC<IconSvgProps> = ({ size = 20, width, height, ...props }) => (
+  <svg
+    width={size || width}
+    height={size || height}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <rect x="2" y="5" width="20" height="14" rx="2" fill="#e5e7eb" stroke="#374151" strokeWidth="1.5" />
+    <rect x="2" y="8" width="20" height="3" fill="#d1d5db" />
+    <rect x="6" y="16" width="4" height="1.5" rx="0.75" fill="#9ca3af" />
+  </svg>
+);

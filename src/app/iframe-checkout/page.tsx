@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { validateIframeCheckout } from "@/app/iframe-checkout/validators";
 import { formatCardNumber, formatExpiry } from "@/app/iframe-checkout/formatters";
+import { CreditCardIcon } from "@/components/icons";
 
 const US_STATES = [
   { value: "AL", label: "Alabama" },
@@ -71,6 +72,7 @@ export default function IframeCheckout() {
   const [zip, setZip] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [checkoutMethod, setCheckoutMethod] = useState("card");
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCardNumber(formatCardNumber(e.target.value));
@@ -111,148 +113,189 @@ export default function IframeCheckout() {
         onSubmit={handleSubmit}
         style={{ minWidth: 320 }}
       >
-        <h2 className="text-xl font-bold mb-3 text-center">Checkout</h2>
-        <div className="mb-3">
-          <label className="block text-gray-700 mb-1">Email</label>
+        {/* Top radio option for Card */}
+        <div className="flex items-center mb-4">
           <input
-            type="email"
-            className="w-full px-2 py-1.5 border rounded bg-white placeholder-gray-400 text-sm text-black caret-black"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="email@example.com"
-            required
+            type="radio"
+            id="card-option"
+            name="checkout-method"
+            checked={checkoutMethod === "card"}
+            onChange={() => setCheckoutMethod("card")}
+            className="form-radio h-4 w-4 text-blue-600"
           />
+          <label htmlFor="card-option" className="ml-2 text-base font-semibold text-gray-800 cursor-pointer">
+            <CreditCardIcon className="inline-block mr-1" /> Card
+          </label>
         </div>
-        <div className="mb-4 p-3 border rounded bg-gray-50">
-          <h3 className="text-base font-semibold mb-2 text-gray-700">Card Information</h3>
-          <div className="mb-3">
-            <label className="block text-gray-700 mb-1">Card Number</label>
-            <input
-              type="text"
-              className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-              value={cardNumber}
-              onChange={handleCardNumberChange}
-              maxLength={19}
-              placeholder="1234 5678 9012 3456"
-              required
-            />
-          </div>
-          <div className="flex gap-2 mb-1.5">
-            <div className="flex-1">
-              <label className="block text-gray-700 mb-1">Expiry</label>
+        {/* Card form section */}
+        {checkoutMethod === "card" && (
+          <>
+            <div className="mb-3">
+              <label className="block text-gray-700 mb-1">Email</label>
               <input
-                type="text"
-                className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                value={expiry}
-                onChange={handleExpiryChange}
-                maxLength={5}
-                placeholder="MM/YY"
+                type="email"
+                className="w-full px-2 py-1.5 border rounded bg-white placeholder-gray-400 text-sm text-black caret-black"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="email@example.com"
                 required
               />
             </div>
-            <div className="flex-1">
-              <label className="block text-gray-700 mb-1">CVC</label>
-              <input
-                type="text"
-                className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                value={cvc}
-                onChange={e => setCvc(e.target.value.replace(/\D/g, ""))}
-                maxLength={4}
-                placeholder="123"
-                required
-              />
-            </div>
-          </div>
-        </div>
-        <div className="mb-4 p-3 border rounded bg-gray-50">
-          <h3 className="text-base font-semibold mb-2 text-gray-700">Billing Information</h3>
-          <div className="mb-3">
-            <label className="block text-gray-700 mb-1">Country</label>
-            <input
-              type="text"
-              className="w-full px-2 py-1.5 border rounded bg-gray-100 text-gray-500 cursor-not-allowed text-sm text-black caret-black"
-              value="United States"
-              disabled
-              readOnly
-            />
-          </div>
-          <div className="mb-1.5">
-            <label className="block text-gray-700 mb-1">Address Line 1</label>
-            <input
-              type="text"
-              className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-              value={address1}
-              onChange={e => setAddress1(e.target.value)}
-              placeholder="123 Main St"
-              required
-            />
-          </div>
-          {showExpandedAddress && (
-            <>
-              <div className="mb-1.5">
-                <label className="block text-gray-700 mb-1">Address Line 2 (optional)</label>
+            <div className="mb-4 p-3 border rounded bg-gray-50">
+              <h3 className="text-base font-semibold mb-2 text-gray-700">Card Information</h3>
+              <div className="mb-3">
+                <label className="block text-gray-700 mb-1">Card Number</label>
                 <input
                   type="text"
                   className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                  value={address2}
-                  onChange={e => setAddress2(e.target.value)}
-                  placeholder="Apt, suite, etc."
+                  value={cardNumber}
+                  onChange={handleCardNumberChange}
+                  maxLength={19}
+                  placeholder="1234 5678 9012 3456"
+                  required
                 />
               </div>
-              <div className="grid grid-cols-3 gap-2 mb-1.5">
-                <div>
-                  <label className="block text-gray-700 mb-1">City</label>
+              <div className="flex gap-2 mb-1.5">
+                <div className="flex-1">
+                  <label className="block text-gray-700 mb-1">Expiry</label>
                   <input
                     type="text"
                     className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                    value={city}
-                    onChange={e => setCity(e.target.value)}
-                    placeholder="City"
+                    value={expiry}
+                    onChange={handleExpiryChange}
+                    maxLength={5}
+                    placeholder="MM/YY"
                     required
                   />
                 </div>
-                <div>
-                  <label className="block text-gray-700 mb-1">State</label>
-                  <select
-                    className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                    value={state}
-                    onChange={e => setState(e.target.value)}
-                    required
-                  >
-                    <option value="" disabled>
-                      Select
-                    </option>
-                    {US_STATES.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-gray-700 mb-1">ZIP Code</label>
+                <div className="flex-1">
+                  <label className="block text-gray-700 mb-1">CVC</label>
                   <input
                     type="text"
                     className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
-                    value={zip}
-                    onChange={e => setZip(e.target.value.replace(/\D/g, ""))}
-                    placeholder="ZIP"
-                    maxLength={10}
+                    value={cvc}
+                    onChange={e => setCvc(e.target.value.replace(/\D/g, ""))}
+                    maxLength={4}
+                    placeholder="123"
                     required
                   />
                 </div>
               </div>
-            </>
-          )}
+            </div>
+            <div className="mb-4 p-3 border rounded bg-gray-50">
+              <h3 className="text-base font-semibold mb-2 text-gray-700">Billing Information</h3>
+              <div className="mb-3">
+                <label className="block text-gray-700 mb-1">Country</label>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1.5 border rounded bg-gray-100 text-gray-500 cursor-not-allowed text-sm text-black caret-black"
+                  value="United States"
+                  disabled
+                  readOnly
+                />
+              </div>
+              <div className="mb-1.5">
+                <label className="block text-gray-700 mb-1">Address Line 1</label>
+                <input
+                  type="text"
+                  className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                  value={address1}
+                  onChange={e => setAddress1(e.target.value)}
+                  placeholder="123 Main St"
+                  required
+                />
+              </div>
+              {showExpandedAddress && (
+                <>
+                  <div className="mb-1.5">
+                    <label className="block text-gray-700 mb-1">Address Line 2 (optional)</label>
+                    <input
+                      type="text"
+                      className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                      value={address2}
+                      onChange={e => setAddress2(e.target.value)}
+                      placeholder="Apt, suite, etc."
+                    />
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mb-1.5">
+                    <div>
+                      <label className="block text-gray-700 mb-1">City</label>
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                        value={city}
+                        onChange={e => setCity(e.target.value)}
+                        placeholder="City"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 mb-1">State</label>
+                      <select
+                        className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                        value={state}
+                        onChange={e => setState(e.target.value)}
+                        required
+                      >
+                        <option value="" disabled>
+                          Select
+                        </option>
+                        {US_STATES.map((s) => (
+                          <option key={s.value} value={s.value}>
+                            {s.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 mb-1">ZIP Code</label>
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1.5 border rounded bg-white text-sm text-black caret-black"
+                        value={zip}
+                        onChange={e => setZip(e.target.value.replace(/\D/g, ""))}
+                        placeholder="ZIP"
+                        maxLength={10}
+                        required
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            {error && <div className="text-red-500 mb-2 text-center text-sm">{error}</div>}
+            {success && <div className="text-green-600 mb-2 text-center text-sm">Payment successful! (placeholder)</div>}
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700 transition text-base"
+            >
+              Pay
+            </button>
+          </>
+        )}
+        {/* Bottom radio option for Monetic Pay */}
+        <div className="flex items-center my-4">
+          <input
+            type="radio"
+            id="monetic-option"
+            name="checkout-method"
+            checked={checkoutMethod === "monetic"}
+            onChange={() => setCheckoutMethod("monetic")}
+            className="form-radio h-4 w-4 text-green-700"
+          />
+          <label htmlFor="monetic-option" className="ml-2 text-base font-semibold cursor-pointer" style={{ color: '#228B22' }}>
+            Pay with Monetic
+          </label>
         </div>
-        {error && <div className="text-red-500 mb-2 text-center text-sm">{error}</div>}
-        {success && <div className="text-green-600 mb-2 text-center text-sm">Payment successful! (placeholder)</div>}
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700 transition text-base"
-        >
-          Pay
-        </button>
+        {/* Monetic Pay section */}
+        {checkoutMethod === "monetic" && (
+          <div className="flex flex-col items-center justify-center py-8">
+            <p className="mb-4 text-lg font-semibold text-center">Scan to pay with Monetic Pay</p>
+            <div className="mb-6 bg-white p-4 rounded shadow text-center text-gray-500">
+              QR code will appear here.
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
