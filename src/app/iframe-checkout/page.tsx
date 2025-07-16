@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 
 export default function IframeCheckout() {
@@ -33,48 +35,52 @@ export default function IframeCheckout() {
           <label className="block text-gray-700 mb-1">Email</label>
           <input
             type="email"
-            className="w-full px-3 py-2 border rounded"
+            className="w-full px-3 py-2 border rounded bg-white placeholder-gray-400"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            placeholder="email@example.com"
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Card Number</label>
-          <input
-            type="text"
-            className="w-full px-3 py-2 border rounded"
-            value={cardNumber}
-            onChange={e => setCardNumber(e.target.value)}
-            maxLength={19}
-            placeholder="1234 5678 9012 3456"
-            required
-          />
-        </div>
-        <div className="flex gap-2 mb-4">
-          <div className="flex-1">
-            <label className="block text-gray-700 mb-1">Expiry</label>
+        <div className="mb-6 p-4 border rounded bg-gray-50">
+          <h3 className="text-lg font-semibold mb-3 text-gray-700">Card Information</h3>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-1">Card Number</label>
             <input
               type="text"
-              className="w-full px-3 py-2 border rounded"
-              value={expiry}
-              onChange={e => setExpiry(e.target.value)}
-              maxLength={5}
-              placeholder="MM/YY"
+              className="w-full px-3 py-2 border rounded bg-white"
+              value={cardNumber}
+              onChange={e => setCardNumber(e.target.value)}
+              maxLength={19}
+              placeholder="1234 5678 9012 3456"
               required
             />
           </div>
-          <div className="flex-1">
-            <label className="block text-gray-700 mb-1">CVC</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border rounded"
-              value={cvc}
-              onChange={e => setCvc(e.target.value)}
-              maxLength={4}
-              placeholder="123"
-              required
-            />
+          <div className="flex gap-2 mb-2">
+            <div className="flex-1">
+              <label className="block text-gray-700 mb-1">Expiry</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded bg-white"
+                value={expiry}
+                onChange={e => setExpiry(e.target.value)}
+                maxLength={5}
+                placeholder="MM/YY"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-gray-700 mb-1">CVC</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded bg-white"
+                value={cvc}
+                onChange={e => setCvc(e.target.value)}
+                maxLength={4}
+                placeholder="123"
+                required
+              />
+            </div>
           </div>
         </div>
         {error && <div className="text-red-500 mb-2 text-center">{error}</div>}
