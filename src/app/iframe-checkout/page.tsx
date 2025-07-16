@@ -30,25 +30,25 @@ export default function IframeCheckout() {
         onSubmit={handleSubmit}
         style={{ minWidth: 320 }}
       >
-        <h2 className="text-2xl font-bold mb-4 text-center">Checkout</h2>
-        <div className="mb-4">
+        <h2 className="text-xl font-bold mb-3 text-center">Checkout</h2>
+        <div className="mb-3">
           <label className="block text-gray-700 mb-1">Email</label>
           <input
             type="email"
-            className="w-full px-3 py-2 border rounded bg-white placeholder-gray-400"
+            className="w-full px-2 py-1.5 border rounded bg-white placeholder-gray-400 text-sm"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="email@example.com"
             required
           />
         </div>
-        <div className="mb-6 p-4 border rounded bg-gray-50">
-          <h3 className="text-lg font-semibold mb-3 text-gray-700">Card Information</h3>
-          <div className="mb-4">
+        <div className="mb-4 p-3 border rounded bg-gray-50">
+          <h3 className="text-base font-semibold mb-2 text-gray-700">Card Information</h3>
+          <div className="mb-3">
             <label className="block text-gray-700 mb-1">Card Number</label>
             <input
               type="text"
-              className="w-full px-3 py-2 border rounded bg-white"
+              className="w-full px-2 py-1.5 border rounded bg-white text-sm"
               value={cardNumber}
               onChange={e => setCardNumber(e.target.value)}
               maxLength={19}
@@ -56,12 +56,12 @@ export default function IframeCheckout() {
               required
             />
           </div>
-          <div className="flex gap-2 mb-2">
+          <div className="flex gap-2 mb-1.5">
             <div className="flex-1">
               <label className="block text-gray-700 mb-1">Expiry</label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border rounded bg-white"
+                className="w-full px-2 py-1.5 border rounded bg-white text-sm"
                 value={expiry}
                 onChange={e => setExpiry(e.target.value)}
                 maxLength={5}
@@ -73,7 +73,7 @@ export default function IframeCheckout() {
               <label className="block text-gray-700 mb-1">CVC</label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border rounded bg-white"
+                className="w-full px-2 py-1.5 border rounded bg-white text-sm"
                 value={cvc}
                 onChange={e => setCvc(e.target.value)}
                 maxLength={4}
@@ -83,33 +83,33 @@ export default function IframeCheckout() {
             </div>
           </div>
         </div>
-        <div className="mb-6 p-4 border rounded bg-gray-50">
-          <h3 className="text-lg font-semibold mb-3 text-gray-700">Billing Information</h3>
-          <div className="mb-4">
+        <div className="mb-4 p-3 border rounded bg-gray-50">
+          <h3 className="text-base font-semibold mb-2 text-gray-700">Billing Information</h3>
+          <div className="mb-3">
             <label className="block text-gray-700 mb-1">Country</label>
             <input
               type="text"
-              className="w-full px-3 py-2 border rounded bg-gray-100 text-gray-500 cursor-not-allowed"
+              className="w-full px-2 py-1.5 border rounded bg-gray-100 text-gray-500 cursor-not-allowed text-sm"
               value="United States"
               disabled
               readOnly
             />
           </div>
-          <div className="mb-2">
+          <div className="mb-1.5">
             <label className="block text-gray-700 mb-1">Address</label>
             <input
               type="text"
-              className="w-full px-3 py-2 border rounded bg-white"
+              className="w-full px-2 py-1.5 border rounded bg-white text-sm"
               placeholder="123 Main St, City, State, ZIP"
               required
             />
           </div>
         </div>
-        {error && <div className="text-red-500 mb-2 text-center">{error}</div>}
-        {success && <div className="text-green-600 mb-2 text-center">Payment successful! (placeholder)</div>}
+        {error && <div className="text-red-500 mb-2 text-center text-sm">{error}</div>}
+        {success && <div className="text-green-600 mb-2 text-center text-sm">Payment successful! (placeholder)</div>}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700 transition text-base"
         >
           Pay
         </button>
