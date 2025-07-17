@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { validateIframeCheckout } from "@/app/iframe-checkout/validators";
 import { formatCardNumber, formatExpiry } from "@/app/iframe-checkout/formatters";
 import { CreditCardIcon } from "@/components/icons";
+import { createAndStoreWallet } from "./handlers";
 
 const US_STATES = [
   { value: "AL", label: "Alabama" },
@@ -73,6 +74,7 @@ export default function IframeCheckout() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [checkoutMethod, setCheckoutMethod] = useState("card");
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCardNumber(formatCardNumber(e.target.value));
@@ -84,10 +86,11 @@ export default function IframeCheckout() {
 
   const showExpandedAddress = address1.trim().length > 0;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
+    setWalletAddress(null);
 
     // Compose address string for validation
     const address = [address1, address2, city, state, zip].filter(Boolean).join(", ");
@@ -103,7 +106,14 @@ export default function IframeCheckout() {
       setError(validationError);
       return;
     }
-    setSuccess(true);
+    // Create wallet linked to user's email and show address
+    try {
+      const address = await createAndStoreWallet(email);
+      setWalletAddress(address);
+      setSuccess(true);
+    } catch (err) {
+      setError("Failed to create wallet");
+    }
   };
 
   return (
@@ -265,6 +275,11 @@ export default function IframeCheckout() {
             </div>
             {error && <div className="text-red-500 mb-2 text-center text-sm">{error}</div>}
             {success && <div className="text-green-600 mb-2 text-center text-sm">Payment successful! (placeholder)</div>}
+            {walletAddress && (
+              <div className="text-blue-600 mb-2 text-center text-sm">
+                Wallet Address: {walletAddress}
+              </div>
+            )}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-1.5 rounded hover:bg-blue-700 transition text-base"
