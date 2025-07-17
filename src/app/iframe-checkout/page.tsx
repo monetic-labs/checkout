@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { validateIframeCheckout } from "@/app/iframe-checkout/validators";
 import { formatCardNumber, formatExpiry } from "@/app/iframe-checkout/formatters";
 import { CreditCardIcon } from "@/components/icons";
-import { createAndStoreWallet } from "./handlers";
+import { createAndStoreWallet, getExistingWallet } from "./handlers";
 
 const US_STATES = [
   { value: "AL", label: "Alabama" },
@@ -92,9 +92,8 @@ export default function IframeCheckout() {
     setSuccess(false);
     setWalletAddress(null);
 
-    // Compose address string for validation
+    // Restore input validation
     const address = [address1, address2, city, state, zip].filter(Boolean).join(", ");
-
     const validationError = validateIframeCheckout({
       email,
       cardNumber,
@@ -106,6 +105,15 @@ export default function IframeCheckout() {
       setError(validationError);
       return;
     }
+
+    // Check if wallet already exists for this email
+    const existingWallet = getExistingWallet(email);
+    if (existingWallet) {
+      setWalletAddress(existingWallet);
+      setSuccess(true);
+      return;
+    }
+
     // Create wallet linked to user's email and show address
     try {
       const address = await createAndStoreWallet(email);

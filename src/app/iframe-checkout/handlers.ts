@@ -6,11 +6,32 @@ import { Wallet } from 'ethers';
 const ENCRYPTION_PASSWORD = 'replace-with-user-password';
 
 /**
+ * Check if a wallet already exists for the given email
+ */
+export function getExistingWallet(email: string): string | null {
+  const storedEmail = localStorage.getItem('user_email');
+  const storedWalletAddress = localStorage.getItem('wallet_address');
+  
+  if (storedEmail === email && storedWalletAddress) {
+    return storedWalletAddress;
+  }
+  
+  return null;
+}
+
+/**
  * Creates a Candide SafeAccount for the user, encrypts the private key, and stores it in localStorage.
  * The wallet will be linked to the user's email in your backend system.
  * Returns the wallet address.
  */
 export async function createAndStoreWallet(userEmail: string) {
+  // Check if wallet already exists for this email
+  const existingWallet = getExistingWallet(userEmail);
+  if (existingWallet) {
+    console.log('Wallet already exists for this email:', existingWallet);
+    return existingWallet;
+  }
+
   // 1. Generate a new Ethereum wallet
   const wallet = Wallet.createRandom();
   const privateKey = wallet.privateKey;
