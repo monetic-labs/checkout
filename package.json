@@ -29,8 +29,10 @@
     "@heroui/theme": "2.4.15",
     "@react-aria/ssr": "3.9.4",
     "@react-aria/visually-hidden": "3.8.12",
+    "abstractionkit": "^0.2.21",
     "card-validator": "^10.0.2",
     "clsx": "2.1.1",
+    "dotenv": "^17.2.0",
     "framer-motion": "~11.1.9",
     "intl-messageformat": "^10.7.16",
     "lucide-react": "^0.441.0",
@@ -41,6 +43,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "20.5.7",
     "@types/react": "18.3.3",
     "@typescript-eslint/eslint-plugin": "7.2.0",
