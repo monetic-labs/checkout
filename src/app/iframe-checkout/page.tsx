@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { validateIframeCheckout } from "@/app/iframe-checkout/validators";
 import { formatCardNumber, formatExpiry } from "@/app/iframe-checkout/formatters";
 import { CreditCardIcon } from "@/components/icons";
-import { createAndStoreWallet, getExistingWallet } from "./handlers";
+import { createAndStoreWallet, getExistingWallet, processPaymentWithWallet, buildNewCardPayment } from "./handlers";
 
 const US_STATES = [
   { value: "AL", label: "Alabama" },
@@ -106,6 +106,28 @@ export default function IframeCheckout() {
       return;
     }
 
+    // Prepare billing address object
+    const billingAddress = {
+      firstName: "", // TODO: Add first name field to form/state if needed
+      lastName: "",  // TODO: Add last name field to form/state if needed
+      address1,
+      city,
+      state,
+      postalCode: zip,
+      countryCode: "US",
+    };
+
+    // Prepare card object
+    const card = {
+      name: email, // TODO: Replace with cardholder name field if available
+      number: cardNumber,
+      expiration: expiry,
+      cvv: cvc,
+    };
+
+    // Build payment object
+    const payment = buildNewCardPayment(card, billingAddress);
+
     // Check if wallet already exists for this email
     const existingWallet = getExistingWallet(email);
     if (existingWallet) {
@@ -116,8 +138,10 @@ export default function IframeCheckout() {
 
     // Create wallet linked to user's email and show address
     try {
+      const phoneNumber = "1234567890"; // TODO: get phone number from user
       const address = await createAndStoreWallet(email);
       setWalletAddress(address);
+      await processPaymentWithWallet(email, phoneNumber, address, payment, { currency: "USD", amount: 0 }); // TODO: set correct amount
       setSuccess(true);
     } catch (err) {
       setError("Failed to create wallet");
